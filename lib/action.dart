@@ -68,7 +68,7 @@ class _ActionBluetoothState extends State<ActionBluetooth> {
   }
 
   sendData(List<int> data) async {
-    log("Data: ${data.toString()}");
+    if (!isConnect) return;
     if (data.length <= 20) {
       // print("Sending small package");
       await bluetoothcharacteristics?.write(data);
@@ -130,6 +130,7 @@ class _ActionBluetoothState extends State<ActionBluetooth> {
                 try {
                   if (isConnect) {
                     await device?.disconnect();
+                    listenerHolder?.cancel();
                   } else {
                     await device?.connect();
                     await discoveredServiceList(device!);
@@ -151,6 +152,7 @@ class _ActionBluetoothState extends State<ActionBluetooth> {
               onPressed: () {
                 logText.clear();
                 logArray.clear();
+                setState(() {});
               },
               child: Text("Clear"))
         ],
